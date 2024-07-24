@@ -141,7 +141,6 @@
             throw new Error(errorData.detail);
         }
 
-        // Redirigir a la página de carga
         window.location.href = 'CargaLogin.html';
     } catch (error) {
         Swal.fire({
@@ -153,7 +152,6 @@
         console.error('Error:', error);
     }
 }
-
 
 
     async function registrar() {
