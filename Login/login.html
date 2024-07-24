@@ -121,124 +121,84 @@
         }
 
         async function login() {
-            const nombre_usuario = document.getElementById('login_nombre_usuario').value;
-            const contrasena = document.getElementById('login_contrasena').value;
-        
-            try {
-                const response = await fetch('https://backend2-5c25.onrender.com/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        nombre_usuario: nombre_usuario,
-                        contrasena: contrasena
-                    })
-                });
-            
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.detail);
-                }
-            
-                // Redirigir a la página de carga
-                window.location.href = 'CargaLogin.html';
-            
-            } catch (error) {
-                // Mostrar mensaje de error usando SweetAlert2
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: "top",
-                    showConfirmButton: false,
-                    timer: 5000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.onmouseenter = Swal.stopTimer;
-                        toast.onmouseleave = Swal.resumeTimer;
-                    }
-                });
-                Toast.fire({
-                    icon: 'error',
-                    title: 'Error al iniciar sesión',
-                    text: error.message || 'Ocurrió un problema al intentar iniciar sesión.'
-                });
-                
-                console.error('Error:', error);
-            }
-        }
-            
+    const nombre_usuario = document.getElementById('login_nombre_usuario').value;
+    const contrasena = document.getElementById('login_contrasena').value;
 
-        async function registrar() {
-            const nombre = document.getElementById('register_nombre').value;
-            const apellido = document.getElementById('register_apellido').value;
-            const nombre_usuario = document.getElementById('register_nombre_usuario').value;
-            const correo_electronico = document.getElementById('register_correo_electronico').value;
-            const contrasena = document.getElementById('register_contrasena').value;
-        
-            try {
-                const response = await fetch('https://backend2-5c25.onrender.com/cliente/registrar', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        nombre: nombre,
-                        apellido: apellido,
-                        nombre_usuario: nombre_usuario,
-                        correo_electronico: correo_electronico,
-                        contrasena: contrasena
-                    })
-                });
-            
-                if (!response.ok) {
-                    throw new Error('Error al registrar');
-                }
-            
-                const data = await response.json();
-            
-                // Mostrar mensaje de éxito usando SweetAlert2
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: "top",
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.onmouseenter = Swal.stopTimer;
-                        toast.onmouseleave = Swal.resumeTimer;
-                    }
-                });
-                Toast.fire({
-                    icon: "success",
-                    title: data.mensaje
-                });
-            
-                // Asignar los valores de registro al formulario de inicio de sesión
-                document.getElementById('login_nombre_usuario').value = nombre_usuario;
-                document.getElementById('login_contrasena').value = contrasena;
-            
-            } catch (error) {
-                // Mostrar mensaje de error usando SweetAlert2
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: "top",
-                    showConfirmButton: false,
-                    timer: 5000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.onmouseenter = Swal.stopTimer;
-                        toast.onmouseleave = Swal.resumeTimer;
-                    }
-                });
-                Toast.fire({
-                    icon: 'error',
-                    title: error.message || 'Error al registrar'
-                });
-                
-                console.error('Error:', error);
-            }
-            
+    try {
+        const response = await fetch('https://backend2-5c25.onrender.com/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                nombre_usuario: nombre_usuario,
+                contrasena: contrasena
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detail);
         }
+
+        window.location.href = 'CargaLogin.html';
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error al iniciar sesión',
+            text: error.message || 'Ocurrió un problema al intentar iniciar sesión.'
+        });
+
+        console.error('Error:', error);
+    }
+}
+
+
+    async function registrar() {
+    const nombre = document.getElementById('register_nombre').value;
+    const apellido = document.getElementById('register_apellido').value;
+    const nombre_usuario = document.getElementById('register_nombre_usuario').value;
+    const correo_electronico = document.getElementById('register_correo_electronico').value;
+    const contrasena = document.getElementById('register_contrasena').value;
+
+    try {
+        const response = await fetch('https://backend2-5c25.onrender.com/cliente/registrar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                nombre: nombre,
+                apellido: apellido,
+                nombre_usuario: nombre_usuario,
+                correo_electronico: correo_electronico,
+                contrasena: contrasena
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al registrar');
+        }
+
+        const data = await response.json();
+        Swal.fire({
+            icon: "success",
+            title: data.mensaje
+        });
+
+        document.getElementById('login_nombre_usuario').value = nombre_usuario;
+        document.getElementById('login_contrasena').value = contrasena;
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error al registrar',
+            text: error.message || 'Ocurrió un problema al intentar registrarse.'
+        });
+
+        console.error('Error:', error);
+    }
+}
+
         
     
     </script>
