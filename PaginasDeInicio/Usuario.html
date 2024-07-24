@@ -242,7 +242,7 @@
       }).mount();
 
       // Cargar productos desde el backend
-      fetch('https://backend2-5c25.onrender.com/productos')
+      fetch('http://127.0.0.1:8000/productos')
         .then(response => response.json())
         .then(data => {
           const productosContainer = document.getElementById('productos-container');
@@ -293,7 +293,7 @@
     /* Función de cerrar sesión */
     document.getElementById('logout-button').addEventListener('click', function (event) {
       event.preventDefault();
-      fetch('https://backend2-5c25.onrender.com/logout', {
+      fetch('http://127.0.0.1:8000/logout', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -344,7 +344,7 @@
   </script>
   <script>
     // Verificar el rol del usuario al cargar la página
-    fetch('https://backend2-5c25.onrender.com/user-role', {
+    fetch('http://127.0.0.1:8000/user-role', {
       method: 'GET',
       credentials: 'include'
     })
