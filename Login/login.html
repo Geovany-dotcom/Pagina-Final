@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro e Iniciar Sesión</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" integrity="sha512-ZnR2wlLbSbr8/c9AgLg3jQPAattCUImNsae6NHYnS9KrIwRdcY9DxFotXhNAKIKbAXlRnujIqUWoXXwqyFOeIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="/Login/styleLogin.css">
-    <link rel="icon" href="/images/ImgsPag/logo.png" type="image/png">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" integrity="sha512-ZnR2wlLbSbr8/c9AgLg3jQPAattCUImNsae6NHYnS9KrIwRdcY9DxFotXhNAKIKbAXlRnujIqUWoXXwqyFOeIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" href="/images/ImgsPag/logo.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
     <style>
         /* Animation */
         @keyframes fadeIn {
@@ -43,13 +42,33 @@
 </head>
 <body>
     <div class="container">
-        <!-- Sección de Registro -->
         <div class="box">
-            <div class="form sign_up">
+            <div class="form sign_in">
                 <div class="close-button">
                     <i class="bi bi-x" onclick="cerrar()"></i>
                 </div>
+                
+                <h3>Iniciar Sesión</h3>
+                <span>Usa una cuenta existente</span>
+                <form id="login_form">
+                    <div class="type">
+                        <input type="text" placeholder="Nombre de usuario" name="nombre_usuario" id="login_nombre_usuario" required>
+                    </div>
+                    <div class="type">
+                        <input type="password" placeholder="Contraseña" name="contrasena" id="login_contrasena" required>
+                    </div>
+                    <div class="forgot">
+                        <span></span>
+                    </div>
+                    <button type="button" class="btn bkg" onclick="login()">Iniciar Sesión</button>
+                </form>
+            </div>
+    
+            <div class="form sign_up">
                 <h3>Regístrate</h3>
+                <div class="close-button">
+                    <i class="bi bi-x" onclick="cerrar()"></i>
+                </div>
                 <span>Llena los siguientes campos y luego inicia sesión.</span>
                 <form id="register_form">
                     <div class="type">
@@ -72,27 +91,6 @@
             </div>
         </div>
 
-        <!-- Sección de Inicio de Sesión -->
-        <div class="box">
-            <div class="form sign_in">
-                <div class="close-button">
-                    <i class="bi bi-x" onclick="cerrar()"></i>
-                </div>
-                <h3>Iniciar Sesión</h3>
-                <span>Usa una cuenta existente</span>
-                <form id="loginForm" class="mt-4">
-                    <div class="type">
-                        <input type="text" class="form-control" id="nombreUsuario" placeholder="Nombre de Usuario" required>
-                    </div>
-                    <div class="type">
-                        <input type="password" class="form-control" id="contrasena" placeholder="Contraseña" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
-                </form>
-                <div id="messageBox" class="mt-3"></div>
-            </div>
-        </div>
-
         <div class="overlay">
             <div class="page page_signIn">
                 <h3>¡Bienvenido!</h3>
@@ -102,16 +100,50 @@
             <div class="page page_signUp">
                 <h3>¿Ya tienes cuenta?</h3>
                 <p>Ingresa tu usuario y contraseña para poder acceder.</p>
-                <button class="btn btnSign-up"><i class="bi bi-arrow-left"></i> Iniciar Sesion</button>
+                <button class="btn btnSign-up"><i class="bi bi-arrow-left"></i> Inicar Sesion</button>
             </div>
         </div>
     </div>
     
-    <!-- Scripts -->
+    <!-- link script -->
     <script src="/Login/mainLogin.js"></script>
     <script>
         function cerrar() {
             window.location.href = '/Index.html'; /* Cambia la URL a donde quieres redirigir */
+        }
+
+        async function login() {
+            const nombre_usuario = document.getElementById('login_nombre_usuario').value;
+            const contrasena = document.getElementById('login_contrasena').value;
+
+            try {
+                const response = await fetch('https://backend2-5c25.onrender.com/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        nombre_usuario: nombre_usuario,
+                        contrasena: contrasena
+                    }),
+                    credentials: 'include' // Importante para enviar cookies con la solicitud
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Error desconocido');
+                }
+
+                window.location.href = 'CargaLogin.html';
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al iniciar sesión',
+                    text: error.message || 'Ocurrió un problema al intentar iniciar sesión.'
+                });
+
+                console.error('Error:', error);
+            }
         }
 
         async function registrar() {
@@ -133,7 +165,8 @@
                         nombre_usuario: nombre_usuario,
                         correo_electronico: correo_electronico,
                         contrasena: contrasena
-                    })
+                    }),
+                    credentials: 'include'
                 });
 
                 if (!response.ok) {
@@ -158,28 +191,6 @@
                 console.error('Error:', error);
             }
         }
-
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const nombreUsuario = document.getElementById('nombreUsuario').value;
-            const contrasena = document.getElementById('contrasena').value;
-
-            axios.post('https://backend2-5c25.onrender.com/login', {
-                nombre_usuario: nombreUsuario,
-                contrasena: contrasena
-            })
-            .then(response => {
-                document.getElementById('messageBox').innerHTML = '<div class="alert alert-success">' + response.data.mensaje + '</div>';
-                if (response.data.tipo_usuario === 'cliente') {
-                    window.location.href = '/pagina_cliente';
-                } else if (response.data.tipo_usuario === 'administrador') {
-                    window.location.href = '/pagina_admin';
-                }
-            })
-            .catch(error => {
-                document.getElementById('messageBox').innerHTML = '<div class="alert alert-danger">Error: ' + (error.response ? error.response.data.detail : error.message) + '</div>';
-            });
-        });
     </script>
 </body>
 </html>
