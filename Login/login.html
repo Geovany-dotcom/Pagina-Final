@@ -113,37 +113,38 @@
         }
 
         async function login() {
-            const nombre_usuario = document.getElementById('login_nombre_usuario').value;
-            const contrasena = document.getElementById('login_contrasena').value;
+    const nombre_usuario = document.getElementById('login_nombre_usuario').value;
+    const contrasena = document.getElementById('login_contrasena').value;
 
-            try {
-                const response = await fetch('https://backend2-5c25.onrender.com/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        nombre_usuario: nombre_usuario,
-                        contrasena: contrasena
-                    }),
-                    credentials: 'include' // Importante para enviar cookies con la solicitud
-                });
+    try {
+        const response = await fetch('https://backend2-5c25.onrender.com/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                nombre_usuario: nombre_usuario,
+                contrasena: contrasena
+            })
+        });
 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.detail || 'Error desconocido');
-                }
-
-                window.location.href = 'CargaLogin.html';
-            } catch (error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error al iniciar sesión',
-                    text: error.message || 'Ocurrió un problema al intentar iniciar sesión.'
-                });
-
-            }
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detail || "Error desconocido");
         }
+
+        window.location.href = 'CargaLogin.html';
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error al iniciar sesión',
+            text: error.message || 'Ocurrió un problema al intentar iniciar sesión.'
+        });
+
+        console.error('Error:', error);
+    }
+}
+
 
         async function registrar() {
             const nombre = document.getElementById('register_nombre').value;
